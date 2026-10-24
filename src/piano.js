@@ -30,4 +30,22 @@ export function pianoSVG(){return `<svg class="piano-svg" viewBox="0 0 800 650" 
 <path d="M388 553L386 587Q387 595 395 590L398 555M408 555L410 588Q416 595 421 589L418 554" fill="url(#gold)" stroke="#91764a" stroke-width="2"/>
 <path d="M152 105V284M650 105V284" stroke="#f7f0e2" stroke-width="2"/><rect x="140" y="99" width="519" height="190" fill="#e7ddc9" opacity=".07" filter="url(#grain)"/>
 </svg>`;}
-export function addKeys(){let x=0;const whites=[];for(let m=21;m<=108;m++)if(![1,3,6,8,10].includes(m%12))whites.push(m);const w=538/52;let html='';for(let i=0;i<whites.length;i++){const m=whites[i],px=132+i*w;html+=`<path data-key="${m}" d="M${px} 338H${px+w-0.6}L${px+w+5} 369H${px-7}Z" fill="url(#key)" stroke="#aaa08e" stroke-width=".5"/>`;if([0,2,5,7,9].includes(m%12)&&m<108){html+=`<path data-key="${m+1}" d="M${px+w-3.2} 338H${px+w+3.2}L${px+w+4.3} 356H${px+w-4.8}Z" fill="url(#black)" stroke="#24251f" stroke-width=".6"/>`;}}document.querySelector('#piano-keys').innerHTML=html;}
+export function addKeys(){
+ const whites=[];
+ for(let midi=21;midi<=108;midi++)if(![1,3,6,8,10].includes(midi%12))whites.push(midi);
+ // A shared perspective keeps adjacent white keys edge-to-edge.
+ const rear=i=>132+i*538/52;
+ const front=i=>124+i*556/52;
+ const at=(i,y)=>rear(i)+(front(i)-rear(i))*(y-338)/31;
+ const whiteKeys=whites.map((midi,i)=>{
+  const left=rear(i),right=rear(i+1)-.45,bottomLeft=front(i),bottomRight=front(i+1)-.45;
+  return `<g class="white-key"><path data-key="${midi}" d="M${left} 338H${right}L${bottomRight} 369H${bottomLeft}Z" fill="url(#key)" stroke="#aaa08e" stroke-width=".35"/><path d="M${bottomLeft} 369H${bottomRight}V373H${bottomLeft}Z" fill="#d2c8b3" stroke="#aaa08e" stroke-width=".3"/></g>`;
+ }).join('');
+ const blackKeys=whites.flatMap((midi,i)=>{
+  if(![0,2,5,7,9].includes(midi%12)||midi>=108)return [];
+  const back=rear(i+1),tip=at(i+1,355),halfBack=3.05,halfTip=3.2;
+  return [`<g class="black-key"><path d="M${back-halfBack} 338H${back+halfBack+1}L${tip+halfTip+1.2} 359H${tip-halfTip+.7}Z" fill="#68604c" opacity=".24" transform="translate(1 1)"/><path data-key="${midi+1}" d="M${back-halfBack} 337H${back+halfBack}L${tip+halfTip} 354H${tip-halfTip}Z" fill="url(#black)" stroke="#24251f" stroke-width=".4"/><path d="M${tip-halfTip} 354H${tip+halfTip}V358H${tip-halfTip}Z" fill="#1c1d19" stroke="#141612" stroke-width=".35"/><path d="M${back-halfBack+.7} 338L${tip-halfTip+.7} 353M${tip-halfTip+.4} 354H${tip+halfTip-.4}" fill="none" stroke="#827c6b" stroke-width=".45" opacity=".65"/></g>`];
+ }).join('');
+ // All black keys must paint after all white keys to remain fully visible.
+ document.querySelector('#piano-keys').innerHTML=`<g class="white-keys">${whiteKeys}</g><g class="black-keys">${blackKeys}</g>`;
+}

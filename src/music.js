@@ -1,3 +1,4 @@
+import furEliseXML from './assets/fur-elise.musicxml?raw';
 import { Midi } from '@tonejs/midi';
 import { unzipSync, strFromU8 } from 'fflate';
 export async function readScore(file) {
@@ -10,9 +11,9 @@ export async function readScore(file) {
 export function finish(s){s.notes=s.notes.filter(n=>Number.isFinite(n.time)&&n.midi>=21&&n.midi<=108&&n.duration>0).sort((a,b)=>a.time-b.time);if(!s.notes.length)throw Error('No playable piano notes were found (A0–C8).');s.duration=s.notes.reduce((end,n)=>Math.max(end,n.time+n.duration),0)+.8;return s;}
 function expandRepeats(part){
  const measures=[...part.querySelectorAll(':scope > measure')],endingAt=[],state=new Map(),prepared=[];let ending=[];
- for(const measure of measures){const start=measure.querySelector('ending[type="start"]');if(start)ending=start.getAttribute('number').split(/[, ]+/).map(Number);endingAt.push([...ending]);const attrs=measure.querySelector('attributes');if(attrs)for(const a of attrs.children)state.set(a.tagName,a.cloneNode(true));const copy=measure.cloneNode(true);copy.querySelector('attributes')?.remove();const merged=part.ownerDocument.createElement('attributes');for(const a of state.values())merged.appendChild(a.cloneNode(true));copy.prepend(merged);prepared.push(copy);if(measure.querySelector('ending[type="stop"], ending[type="discontinue"]'))ending=[];}
+ for(const measure of measures){if(measure.querySelector('repeat[direction="forward"]'))ending=[];const start=measure.querySelector('ending[type="start"]');if(start)ending=start.getAttribute('number').split(/[, ]+/).map(Number);endingAt.push([...ending]);const attrs=measure.querySelector('attributes');if(attrs)for(const a of attrs.children)state.set(a.tagName,a.cloneNode(true));const copy=measure.cloneNode(true);copy.querySelector('attributes')?.remove();const merged=part.ownerDocument.createElement('attributes');for(const a of state.values())merged.appendChild(a.cloneNode(true));copy.prepend(merged);prepared.push(copy);if(measure.querySelector('ending[type="stop"], ending[type="discontinue"]'))ending=[];}
  let i=0,repeatStart=0,pass=1,steps=0;const passes=new Map(),expanded=[];
- while(i<measures.length&&steps++<10000){const m=measures[i];if(m.querySelector('repeat[direction="forward"]'))repeatStart=i;if(!endingAt[i].length||endingAt[i].includes(pass))expanded.push(prepared[i].cloneNode(true));const backward=m.querySelector('repeat[direction="backward"]');if(backward){const count=passes.get(i)||1,total=Math.min(8,Math.max(2,Number(backward.getAttribute('times'))||2));if(count<total){passes.set(i,count+1);pass=count+1;i=repeatStart;continue;}passes.delete(i);pass=count;repeatStart=i+1;}i++;}
+ while(i<measures.length&&steps++<10000){const m=measures[i];if(m.querySelector('repeat[direction="forward"]')){if(repeatStart!==i)pass=1;repeatStart=i;}if(!endingAt[i].length||endingAt[i].includes(pass))expanded.push(prepared[i].cloneNode(true));const backward=m.querySelector('repeat[direction="backward"]');if(backward){const count=passes.get(i)||1,total=Math.min(8,Math.max(2,Number(backward.getAttribute('times'))||2));if(count<total){passes.set(i,count+1);pass=count+1;i=repeatStart;continue;}passes.delete(i);pass=count;repeatStart=i+1;}i++;}
  if(steps>=10000)throw Error('This score contains an invalid repeat structure.');part.replaceChildren(...expanded);
 }
 export function parseXML(xml,name='Untitled'){
@@ -29,11 +30,11 @@ export function parseXML(xml,name='Untitled'){
  if(el.tagName==='note'){const duration=val(el,'duration')/div,chord=!!el.querySelector('chord'),onset=chord?lastStart:cursor;if(!chord)lastStart=cursor;
  const pitch=el.querySelector('pitch');if(pitch&&duration>0){const midi=(val(pitch,'octave',4)+1)*12+steps[pitch.querySelector('step')?.textContent]+val(pitch,'alter')+transpose;const key=`${val(el,'voice',1)}:${midi}`;const ts=[...el.querySelectorAll('tie')].map(t=>t.getAttribute('type'));if(ts.includes('stop')&&ties.has(key)){const n=ties.get(key);n.duration=Math.max(n.duration,onset+duration-n.time);if(!ts.includes('start'))ties.delete(key);}else{const n={midi,time:onset,duration,velocity:.7};notes.push(n);if(ts.includes('start'))ties.set(key,n);}}
  if(!chord)cursor+=duration;end=Math.max(end,cursor);}}
- cursor=Math.max(end,start+(measure.getAttribute('implicit')==='yes'?0:beats*4/beatType));}}
+ cursor=end>start?end:start+(measure.getAttribute('implicit')==='yes'?0:beats*4/beatType);}}
  tempos.sort((a,b)=>a.beat-b.beat);const unique=[];for(const t of tempos){if(unique.at(-1)?.beat===t.beat)unique[unique.length-1]=t;else unique.push(t);}const seconds=b=>{let t=0;for(let i=0;i<unique.length;i++){const p=unique[i],next=unique[i+1]?.beat??Infinity;if(b<=p.beat)break;t+=(Math.min(b,next)-p.beat)*60/p.bpm;if(b<=next)break;}return t;};
  return finish({title:doc.querySelector('work-title, movement-title')?.textContent||name.replace(/\.[^.]+$/,''),composer:doc.querySelector('creator[type="composer"]')?.textContent||'Imported MusicXML',bpm:unique[0]?.bpm||120,notes:notes.map(n=>({...n,time:seconds(n.time),duration:seconds(n.time+n.duration)-seconds(n.time)}))});
 }
-export function demo(){const melody=[76,75,76,75,76,71,74,72,69,60,64,69,71,64,68,71,72,64,76,75,76,75,76,71,74,72,69,60,64,69,71,64,72,71,69];const n=[];let t=0;for(let r=0;r<4;r++)for(let i=0;i<melody.length;i++){const d=[8,12,16,26,30,34].includes(i)?.48:.24;n.push({midi:melody[i],time:t,duration:d*.88,velocity:.65});if(i%4===0){n.push({midi:i<17?45:40,time:t,duration:.7,velocity:.36});n.push({midi:i<17?52:56,time:t+.24,duration:.42,velocity:.3});}t+=d;}return finish({title:'Für Elise',composer:'Ludwig van Beethoven',bpm:104,notes:n});}
+export function demo(){return parseXML(furEliseXML,'fur-elise.musicxml');}
 export class PianoAudio {
  async init(){if(!this.ctx){this.ctx=new AudioContext();this.master=this.ctx.createGain();this.master.gain.value=.65;this.master.connect(this.ctx.destination);this.voices=new Set();}await this.ctx.resume();}
  setVolume(v){if(this.master)this.master.gain.setTargetAtTime(v,this.ctx.currentTime,.02);}

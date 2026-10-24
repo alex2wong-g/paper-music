@@ -13,6 +13,8 @@ Build with `npm run build`. Deploy `dist/` as static assets.
 
 ## Features
 
+- Built-in full Für Elise MusicXML score supplied by the user, parsed by the same importer as uploaded scores.
+
 - Full piano and close-up paper-roll cameras with eased transitions.
 - MIDI (`.mid`, `.midi`), MusicXML (`.xml`, `.musicxml`) and compressed MusicXML (`.mxl`) imports, processed locally.
 - MIDI timing and tempo maps; MusicXML divisions, rests, chords, voices, backup/forward, tempo changes, transposition, ties, repeats, and alternate endings.

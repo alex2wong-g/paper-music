@@ -1,6 +1,8 @@
 async () => {
-const {parseXML,readScore}=await import('/src/music.js');const midiModule=await import('/node_modules/.vite/deps/@tonejs_midi.js');const Midi=midiModule.Midi||midiModule.default.Midi;const {zipSync,strToU8}=await import('/node_modules/.vite/deps/fflate.js');
+const {parseXML,readScore,demo}=await import('/src/music.js');const midiModule=await import('/node_modules/.vite/deps/@tonejs_midi.js');const Midi=midiModule.Midi||midiModule.default.Midi;const {zipSync,strToU8}=await import('/node_modules/.vite/deps/fflate.js');
 const results=[];const check=(name,ok,detail)=>{results.push({name,passed:!!ok,detail});if(!ok)throw Error(name+': '+JSON.stringify(detail));};
+const builtIn=demo();check('Supplied full MusicXML is the default demo',builtIn.title==='Für Elise in A Minor'&&builtIn.notes.length===1037&&builtIn.bpm===72&&Math.abs(builtIn.duration-157.00643939393905)<.001,{title:builtIn.title,notes:builtIn.notes.length,duration:builtIn.duration});
+const keys=document.querySelector('#piano-keys');check('88-key layout has fully layered black keys',keys.querySelectorAll('.white-key').length===52&&keys.querySelectorAll('.black-key').length===36&&keys.lastElementChild.classList.contains('black-keys')&&[...keys.querySelectorAll('.black-key [data-key]')].every(k=>k.getBBox().width>6));
 const n=(step,oct,duration,extra='')=>`<note>${extra}<pitch><step>${step}</step><octave>${oct}</octave></pitch><duration>${duration}</duration></note>`;
 const wrap=body=>`<?xml version="1.0"?><score-partwise version="4.0"><work><work-title>Timing study</work-title></work><part-list><score-part id="P1"><part-name>Piano</part-name></score-part></part-list><part id="P1">${body}</part></score-partwise>`;
 const attrs='<attributes><divisions>2</divisions><time><beats>2</beats><beat-type>4</beat-type></time></attributes>';
