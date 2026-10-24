@@ -8,6 +8,10 @@ A vintage player-piano web app with a warm-white interface, an ivory upright pia
 
 ## Preview
 
+![Pianola full-piano view with a warm-white interface, ivory upright player piano, and perforated paper roll](docs/images/pianola-full-piano.png)
+
+Full-piano view: the complete instrument, including its 88-key keyboard, paper-roll mechanism, and pedals.
+
 ![Pianola paper-roll close-up with vintage paper texture, note perforations, and playback controls](docs/images/pianola-paper-roll.png)
 
 In the paper-roll view, horizontal position represents pitch and perforation length represents note duration. During playback, the paper moves downward and notes sound as they cross the tracker line.
