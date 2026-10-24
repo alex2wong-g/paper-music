@@ -1,29 +1,59 @@
 # Pianola · Paper & Sound
 
-An ivory and brass player-piano web app with an animated, textured 88-note paper roll.
+[中文](README.md) | [English](README.en.md)
 
-## Run
+一个复古风格的自动演奏钢琴网页应用。以暖白色界面、象牙色琴身与黄铜机械细节，呈现打孔纸卷驱动钢琴演奏的过程。导入 MIDI 或 MusicXML 乐谱，即可观看纸卷向下移动，并同步聆听音乐与观察琴键响应。
+
+[在线体验](https://pianola-paper-and-sound.huangyixiu1.chatgpt.site/)
+
+## 应用效果
+
+![Pianola 纸卷特写：带有复古纸张纹理的打孔卷轴及播放控制栏](docs/images/pianola-paper-roll.png)
+
+纸卷特写模式：横向位置对应音高，孔的长度对应音符时值；播放时，纸卷随时间向下移动，经过读孔线的音符同步发声。
+
+## 功能
+
+- **两种镜头**：钢琴全景与纸卷特写，支持平滑切换。
+- **复古视觉**：2.5D 立式钢琴、带纤维与旧化痕迹的纸张、黄铜卷轴，以及完整的 88 键键盘。
+- **默认示例**：内置完整《致爱丽丝》MusicXML 乐谱，与导入文件使用同一套解析流程。
+- **乐谱导入**：支持 MIDI（`.mid`、`.midi`）、MusicXML（`.xml`、`.musicxml`）和压缩 MusicXML（`.mxl`），可选取文件或拖放导入。
+- **同步演奏**：纸卷移动、合成音色与琴键高亮使用同一条时间轴。
+- **播放控制**：播放、暂停、拖动进度、回到开头、调节速度、音量与静音；支持空格键切换播放状态。
+- **本地处理**：乐谱文件在浏览器内解析，无需上传到服务器。
+- **适配与交互**：响应式布局、键盘操作与减少动态效果偏好支持。
+
+## 本地运行
+
+需要 Node.js 和 npm。在仓库根目录执行：
 
 ```sh
-npm install
+npm ci
 npm run dev
 ```
 
-Build with `npm run build`. Deploy `dist/` as static assets.
+打开终端中显示的本地地址。
 
-## Features
+## 构建与部署
 
-- Built-in full Für Elise MusicXML score supplied by the user, parsed by the same importer as uploaded scores.
+```sh
+npm run build
+```
 
-- Full piano and close-up paper-roll cameras with eased transitions.
-- MIDI (`.mid`, `.midi`), MusicXML (`.xml`, `.musicxml`) and compressed MusicXML (`.mxl`) imports, processed locally.
-- MIDI timing and tempo maps; MusicXML divisions, rests, chords, voices, backup/forward, tempo changes, transposition, ties, repeats, and alternate endings.
-- Synchronized downward roll movement, synthesized sound and piano-key highlights.
-- Play/pause, seek, rewind, volume, mute and speed. Space toggles playback.
-- Responsive layout, keyboard controls, file drag and drop, reduced-motion support.
+构建结果位于 `dist/`，可部署到静态网站托管服务。`.openai/hosting.json` 保留了本项目现有的 Sites 发布配置。
 
-## Playback boundaries
+## 乐谱解析与播放范围
 
-The instrument uses a local additive piano-like synthesizer, not sampled acoustic piano audio or a physical pneumatic model. MusicXML must be score-partwise. Grace notes, expressive ornaments, D.C./D.S./coda navigation and pedal markings are not interpreted. MIDI percussion tracks are excluded. Only the 88-key range A0–C8 is played. Playback pauses when the browser tab is hidden.
+MIDI 保留音符起止时间、力度及速度变化，并排除打击乐轨道。MusicXML 支持时值单位、休止符、和弦、多声部、声部时间回退与前进、速度变化、移调、延音线、反复记号及不同结尾。
 
-`qa/browser-check.js` is a browser verification function for MIDI tempo maps, MusicXML timing/polyphony/ties/repeats, compressed MusicXML, rejected invalid files, file import and playback controls. Run against the Vite dev server through browser evaluation.
+当前限制：
+
+- 使用浏览器本地合成的钢琴近似音色；尚未使用原声钢琴采样，也未模拟真实气动机构。
+- MusicXML 需使用 `score-partwise` 格式。
+- 暂不演奏倚音和装饰音，不解析 D.C.、D.S.、Coda 跳转及踏板标记。
+- 仅演奏 A0–C8 范围内的 88 键音符。
+- 浏览器标签页切换到后台时自动暂停。
+
+## 验证
+
+`qa/browser-check.js` 提供浏览器验证函数，覆盖默认乐谱、88 键布局、MIDI 速度变化、MusicXML 多声部与延音线、反复及不同结尾、MXL 解压、无效文件处理、文件导入及播放控制。启动开发服务器后，可通过浏览器脚本执行该函数。
