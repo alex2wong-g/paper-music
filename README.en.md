@@ -16,6 +16,17 @@ Full-piano view: the complete instrument, including its 88-key keyboard, paper-r
 
 In the paper-roll view, horizontal position represents pitch and perforation length represents note duration. During playback, the paper moves downward and notes sound as they cross the tracker line.
 
+## Sheet-music learning mode
+
+Use the **打孔卷轴 / 五线谱** (paper roll / sheet music) switch above the instrument to open the printed score. [OpenSheetMusicDisplay](https://github.com/opensheetmusicdisplay/opensheetmusicdisplay) engraves the original MusicXML, preserving grand staves, accidentals, chords, slurs, repeats, and written fingerings.
+
+- **Follow the current column:** a vertical highlight spans both staves and follows playback, repeats, tempo changes, and seeking, with automatic scrolling.
+- **Connect notes to keys:** the learning keyboard and original piano keys highlight together. Green identifies the lower/left-hand staff and gold the upper/right-hand staff. Pause to inspect pitches, keys, and written fingerings, or click a key to hear it.
+- **Practice slowly:** playback speed goes down to 25%. Toggle **自动跟随** (follow) to **自由浏览** (free browsing) to inspect a passage without automatic scrolling.
+- **Read original fingerings:** when MusicXML includes finger numbers, the score, note readouts, and keyboard show them (1–5). Scores without fingerings show key positions only. Hands are grouped by staff and clef; cross-hand techniques are not inferred.
+
+MIDI contains neither original notation spelling nor fingering. Its generated notation is quantized to sixteenth notes, with hands estimated by a middle-C pitch split, while original audio timing remains unchanged. For complex rhythms, voices, and fingering study, use MusicXML to retain the written score.
+
 ## Features
 
 - **Two cameras:** full piano and paper-roll close-up, with smooth transitions.
@@ -23,6 +34,7 @@ In the paper-roll view, horizontal position represents pitch and perforation len
 - **Built-in score:** the full Für Elise MusicXML score, parsed by the same importer used for uploaded files.
 - **Score import:** MIDI (`.mid`, `.midi`), MusicXML (`.xml`, `.musicxml`), and compressed MusicXML (`.mxl`), through file selection or drag and drop.
 - **Synchronized performance:** paper movement, synthesized sound, and key highlights share one timeline.
+- **Sheet-music display:** an on-demand engraving engine, synchronized columns, automatic following, original fingerings, and an interactive learning keyboard.
 - **Playback controls:** play, pause, seek, rewind, speed, volume, and mute. Space toggles playback.
 - **Local processing:** scores are parsed in the browser without uploading them to a server.
 - **Responsive interaction:** responsive layout, keyboard controls, and support for reduced-motion preferences.
@@ -61,3 +73,5 @@ Current limitations:
 ## Verification
 
 `qa/browser-check.js` provides a browser verification function covering the default score, 88-key layout, MIDI tempo changes, MusicXML polyphony and ties, repeats and alternate endings, compressed MusicXML, invalid files, file import, and playback controls. Run it through browser script evaluation against the development server.
+
+`qa/sheet-check.js` verifies score engraving, source repeats, tempo changes, grand-staff cursor positions, paused key highlights, original fingerings, MIDI transcription, and mode switching.
