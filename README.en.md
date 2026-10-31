@@ -18,9 +18,9 @@ In the paper-roll view, horizontal position represents pitch and perforation len
 
 ## Score shelf
 
-Open **曲谱架 / Score shelf** beside the current piece to browse the built-in collection. Search titles or composers, filter short melodies, flowing harmony, or rhythmic studies, and inspect opening notation, duration, starting BPM, time signature, and listening prompts. Browsing preserves the current performance; loading another score prepares it at the beginning without autoplay. Returning to the current piece keeps its position.
+Open **曲谱架 / Score shelf** beside the current piece to browse the built-in collection. Filter short melodies, flowing harmony, or rhythmic studies, and inspect opening notation, duration, starting BPM, and time signature. Browsing preserves the current performance; loading another score prepares it at the beginning without autoplay. Returning to the current piece keeps its position.
 
-The shelf includes 12 user-supplied MusicXML scores: Für Elise, Minuet in G Major, Ode to Joy, Happy Birthday to You, Swan Lake, Canon in D, Moonlight Sonata (first movement), Nocturne Op. 9 No. 2, Clair de lune, Turkish March, Hungarian Dance No. 5, and The Entertainer. Original files in `public/scores/` retain their credits, arrangement details, and rights metadata. Listening prompts are not formal difficulty ratings.
+The shelf includes 12 user-supplied MusicXML scores: Für Elise, Minuet in G Major, Ode to Joy, Happy Birthday to You, Swan Lake, Canon in D, Moonlight Sonata (first movement), Nocturne Op. 9 No. 2, Clair de lune, Turkish March, Hungarian Dance No. 5, and The Entertainer. Original files in `public/scores/` retain their credits, arrangement details, and rights metadata.
 
 The shelf supports Chinese / EN, keyboard navigation, and Escape to close. On mobile, selecting a score reveals its details, with a link back to the collection. Previews and full sheet music share the same engraving library. Every selected score supports both the paper roll and sheet-music modes.
 
@@ -101,4 +101,4 @@ Current limitations:
 
 `qa/sheet-check.js` verifies score engraving, source repeats, tempo changes, grand-staff cursor positions, paused key highlights, original fingerings, MIDI transcription, and mode switching.
 
-`qa/shelf-check.js` verifies all 12 scores and opening previews, search and filters, rapid selection, uninterrupted browsing, loading at the beginning, language switching, and sheet-music compatibility.
+`qa/shelf-check.js` verifies all 12 scores and opening previews, compact layout and filters, rapid selection, uninterrupted browsing, loading at the beginning, language switching, and sheet-music compatibility.
