@@ -16,6 +16,14 @@ Full-piano view: the complete instrument, including its 88-key keyboard, paper-r
 
 In the paper-roll view, horizontal position represents pitch and perforation length represents note duration. During playback, the paper moves downward and notes sound as they cross the tracker line.
 
+## Score shelf
+
+Open **曲谱架 / Score shelf** beside the current piece to browse the built-in collection. Search titles or composers, filter short melodies, flowing harmony, or rhythmic studies, and inspect opening notation, duration, starting BPM, time signature, and listening prompts. Browsing preserves the current performance; loading another score prepares it at the beginning without autoplay. Returning to the current piece keeps its position.
+
+The shelf includes 12 user-supplied MusicXML scores: Für Elise, Minuet in G Major, Ode to Joy, Happy Birthday to You, Swan Lake, Canon in D, Moonlight Sonata (first movement), Nocturne Op. 9 No. 2, Clair de lune, Turkish March, Hungarian Dance No. 5, and The Entertainer. Original files in `public/scores/` retain their credits, arrangement details, and rights metadata. Listening prompts are not formal difficulty ratings.
+
+The shelf supports Chinese / EN, keyboard navigation, and Escape to close. On mobile, selecting a score reveals its details, with a link back to the collection. Previews and full sheet music share the same engraving library. Every selected score supports both the paper roll and sheet-music modes.
+
 ## Sheet-music learning mode
 
 Use the **打孔卷轴 / 五线谱** (paper roll / sheet music) switch above the instrument to open the printed score. [OpenSheetMusicDisplay](https://github.com/opensheetmusicdisplay/opensheetmusicdisplay) engraves the original MusicXML, preserving grand staves, accidentals, chords, slurs, repeats, and written fingerings.
@@ -77,3 +85,5 @@ Current limitations:
 `qa/browser-check.js` provides a browser verification function covering the default score, 88-key layout, MIDI tempo changes, MusicXML polyphony and ties, repeats and alternate endings, compressed MusicXML, invalid files, file import, and playback controls. Run it through browser script evaluation against the development server.
 
 `qa/sheet-check.js` verifies score engraving, source repeats, tempo changes, grand-staff cursor positions, paused key highlights, original fingerings, MIDI transcription, and mode switching.
+
+`qa/shelf-check.js` verifies all 12 scores and opening previews, search and filters, rapid selection, uninterrupted browsing, loading at the beginning, language switching, and sheet-music compatibility.

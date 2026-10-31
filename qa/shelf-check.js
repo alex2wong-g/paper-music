@@ -1,0 +1,19 @@
+async () => {
+ const {scoreShelf:s, sheetView}=await import([...document.scripts].find(e=>e.src.includes('/src/main.js')).src);
+ const {SCORE_CATALOG}=await import('/src/score-catalog.js');
+ const results=[];const check=(name,ok,detail)=>{results.push({name,passed:!!ok,detail});if(!ok)throw Error(name+': '+JSON.stringify(detail));};
+ const wait=()=>new Promise(r=>setTimeout(r,100));
+ const parsed=await Promise.all(SCORE_CATALOG.map(e=>s.getScore(e)));check('All 12 supplied scores parse into playable notes',parsed.length===12&&parsed.every(p=>p.notes.length>0&&p.duration>0));
+ document.querySelector('#play').click();await wait();const title=document.querySelector('#track-title').textContent;document.querySelector('#open-shelf').click();await s.select('canon-in-d');check('Browsing preserves the current performance',document.querySelector('#play').getAttribute('aria-label')==='暂停'&&document.querySelector('#track-title').textContent===title);
+ const previews=[];for(const entry of SCORE_CATALOG){await s.select(entry.id);previews.push({id:entry.id,state:s.dialog.dataset.previewState,svg:s.dialog.querySelectorAll('.shelf-notation svg').length});}check('All 12 opening notation previews render',previews.every(p=>p.state==='ready'&&p.svg>0),previews);
+ const input=s.dialog.querySelector('#shelf-search');input.value='月光';input.dispatchEvent(new Event('input'));check('Chinese title search',s.dialog.querySelectorAll('.shelf-card').length===2);
+ input.value='fur elise';input.dispatchEvent(new Event('input'));check('Latin search handles accents and spaces',s.dialog.querySelectorAll('.shelf-card').length===1);
+ input.value='不存在的曲目';input.dispatchEvent(new Event('input'));check('Empty search has a readable message',!!s.dialog.querySelector('.shelf-empty'));
+ input.value='';input.dispatchEvent(new Event('input'));s.dialog.querySelector('[data-filter="flow"]').click();check('Category filter',s.dialog.querySelectorAll('.shelf-card').length===4);s.dialog.querySelector('[data-filter="all"]').click();
+ await Promise.all([s.select('swan-lake'),s.select('canon-in-d')]);check('Rapid selections keep the final score and preview',s.selectedScore.libraryId==='canon-in-d'&&s.dialog.dataset.selectedScore==='canon-in-d'&&s.dialog.dataset.previewState==='ready');
+ s.dialog.querySelector('.shelf-load').click();check('Choosing loads the selected piece and closes the shelf',document.querySelector('#track-title').textContent==='D 大调卡农'&&!s.dialog.open&&s.currentId==='canon-in-d');check('New piece starts paused at the beginning',document.querySelector('#play').getAttribute('aria-label')==='播放'&&document.querySelector('#seek').value==='0');
+ document.querySelector('#play').click();await new Promise(r=>setTimeout(r,400));document.querySelector('#play').click();const position=document.querySelector('#seek').value;document.querySelector('#open-shelf').click();await s.select('canon-in-d');s.dialog.querySelector('.shelf-load').click();check('Returning to the current score preserves position',document.querySelector('#seek').value===position);
+ document.querySelector('[data-language="en"]').click();document.querySelector('#open-shelf').click();await s.select('bach-minuet-g');check('English catalog titles, composer and controls',s.dialog.querySelector('h3').textContent==='Minuet in G Major'&&s.dialog.querySelector('.shelf-load').textContent==='Load this score'&&s.dialog.querySelector('.shelf-detail-composer').textContent==='Christian Petzold');s.dialog.querySelector('.shelf-close').click();document.querySelector('[data-language="zh"]').click();
+ document.querySelector('[data-mode="sheet"]').click();await sheetView.queue;check('Loaded library score also supports sheet-music mode',sheetView.score.libraryId==='canon-in-d'&&sheetView.renderedScore===sheetView.score&&sheetView.entries.size>0);
+ document.querySelector('[data-mode="roll"]').click();return results;
+}
