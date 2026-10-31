@@ -68,6 +68,21 @@ npm run build
 
 构建结果位于 `dist/`，可部署到静态网站托管服务。`.openai/hosting.json` 保留了本项目现有的 Sites 发布配置。
 
+### GitHub Pages
+
+在仓库 **Settings → Pages → Build and deployment → Source** 中选择 **GitHub Actions**。推送到 `main` 后，`.github/workflows/pages.yml` 会安装依赖、构建并发布 `dist/`。
+
+工作流根据 Pages 配置自动设置 Vite 的 `base`；本仓库的项目路径为 `/paper-music/`，构建后的 JS、CSS 和曲谱均从此路径载入。不要选择直接发布 `main / (root)`，源码中的 `/src/main.js` 是开发入口，需要由 Vite 转换为构建资源。
+
+本地模拟项目路径构建：
+
+```sh
+npm run build -- --base=/paper-music/
+npx vite preview --base=/paper-music/
+```
+
+普通 `npm run build` 仍使用根路径，适用于现有 Sites 托管。
+
 ## 乐谱解析与播放范围
 
 MIDI 保留音符起止时间、力度及速度变化，并排除打击乐轨道。MusicXML 支持时值单位、休止符、和弦、多声部、声部时间回退与前进、速度变化、移调、延音线、反复记号及不同结尾。

@@ -68,6 +68,21 @@ npm run build
 
 The build output is written to `dist/` and can be deployed to a static hosting service. `.openai/hosting.json` retains this project's existing Sites deployment configuration.
 
+### GitHub Pages
+
+Select **GitHub Actions** under **Settings → Pages → Build and deployment → Source**. On pushes to `main`, `.github/workflows/pages.yml` installs dependencies, builds the application, and publishes `dist/`.
+
+The workflow sets Vite's `base` from the Pages configuration. This repository uses `/paper-music/`, including JavaScript, CSS, and score requests. Do not publish `main / (root)` directly: `/src/main.js` is a development entry that Vite must transform into production assets.
+
+To simulate the project path locally:
+
+```sh
+npm run build -- --base=/paper-music/
+npx vite preview --base=/paper-music/
+```
+
+The regular `npm run build` retains the root base path for the existing Sites hosting.
+
 ## Score parsing and playback scope
 
 MIDI preserves note timing, velocity, and tempo changes, excluding percussion tracks. MusicXML supports divisions, rests, chords, multiple voices, backup/forward timing, tempo changes, transposition, ties, repeats, and alternate endings.
