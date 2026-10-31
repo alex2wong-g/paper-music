@@ -1,4 +1,4 @@
-export function pianoSVG(){return `<svg class="piano-svg" viewBox="0 0 800 650" xmlns="http://www.w3.org/2000/svg" aria-label="Vintage ivory upright player piano"><defs>
+export function pianoSVG(){return `<svg class="piano-svg" viewBox="0 0 800 650" xmlns="http://www.w3.org/2000/svg" aria-label="复古象牙色立式自动钢琴" data-i18n-aria="pianoAria"><defs>
 <linearGradient id="ivory" x2="1" y2=".4"><stop stop-color="#e2d8c6"/><stop offset=".25" stop-color="#f2eadb"/><stop offset=".7" stop-color="#e7decc"/><stop offset="1" stop-color="#c8bca5"/></linearGradient>
 <linearGradient id="edge" x2="0" y2="1"><stop stop-color="#faf5e9"/><stop offset=".35" stop-color="#ddd0b8"/><stop offset="1" stop-color="#a89b81"/></linearGradient>
 <linearGradient id="gold"><stop stop-color="#6c5935"/><stop offset=".3" stop-color="#c4a56a"/><stop offset=".55" stop-color="#e4d3a2"/><stop offset="1" stop-color="#8e7548"/></linearGradient>
@@ -19,7 +19,7 @@ export function pianoSVG(){return `<svg class="piano-svg" viewBox="0 0 800 650" 
 <rect x="303" y="245" width="193" height="5" fill="#252b24"/><path d="M307 247H493" stroke="#b5a475" stroke-dasharray="1 2"/>
 <circle cx="296" cy="139" r="4" fill="url(#gold)"/><circle cx="506" cy="139" r="4" fill="url(#gold)"/>
 <path d="M143 295H657L665 332L134 332Z" fill="url(#ivory)" stroke="#b3a68c"/>
-<path d="M144 298H657" stroke="#f8f1e4" stroke-width="3"/><text x="400" y="318" text-anchor="middle" font-family="Georgia" font-size="12" letter-spacing="4" fill="#867552">PIANOLA</text>
+<path d="M144 298H657" stroke="#f8f1e4" stroke-width="3"/><text x="400" y="318" text-anchor="middle" font-family="Georgia" font-size="22" letter-spacing="3" fill="#867552" data-i18n="brand">纸上音符</text>
 <path d="M133 335H667L684 373L119 373Z" fill="#a5987f" stroke="#ac9f85"/><g id="piano-keys"></g>
 <path d="M119 373H684V385H119Z" fill="url(#edge)" stroke="#a7987c"/><path d="M113 386H690V398H113Z" fill="url(#ivory)" stroke="#b5a88e"/>
 <path d="M144 399H659V568H144Z" fill="url(#ivory)" stroke="#b7aa91"/><rect x="177" y="418" width="449" height="125" rx="2" fill="none" stroke="#bdaf94" stroke-width="2"/><rect x="183" y="424" width="437" height="112" fill="none" stroke="#f4ecd9"/>

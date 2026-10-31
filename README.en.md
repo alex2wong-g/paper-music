@@ -1,4 +1,4 @@
-# Pianola · Paper & Sound
+# 纸上音符 · Paper Notes
 
 [中文](README.md) | [English](README.en.md)
 
@@ -8,11 +8,11 @@ A vintage player-piano web app with a warm-white interface, an ivory upright pia
 
 ## Preview
 
-![Pianola full-piano view with a warm-white interface, ivory upright player piano, and perforated paper roll](docs/images/pianola-full-piano.png)
+![纸上音符 full-piano view with a warm-white interface, ivory upright player piano, and perforated paper roll](docs/images/pianola-full-piano.png)
 
 Full-piano view: the complete instrument, including its 88-key keyboard, paper-roll mechanism, and pedals.
 
-![Pianola paper-roll close-up with vintage paper texture, note perforations, and playback controls](docs/images/pianola-paper-roll.png)
+![纸上音符 paper-roll close-up with vintage paper texture, note perforations, and playback controls](docs/images/pianola-paper-roll.png)
 
 In the paper-roll view, horizontal position represents pitch and perforation length represents note duration. During playback, the paper moves downward and notes sound as they cross the tracker line.
 
@@ -28,6 +28,8 @@ Use the **打孔卷轴 / 五线谱** (paper roll / sheet music) switch above the
 MIDI contains neither original notation spelling nor fingering. Its generated notation is quantized to sixteenth notes, with hands estimated by a middle-C pitch split, while original audio timing remains unchanged. For complex rhythms, voices, and fingering study, use MusicXML to retain the written score.
 
 ## Features
+
+- **Two interface languages:** Chinese by default, with a 中文 / EN switch. BPM, MIDI, and MusicXML retain their standard names. Interface text ranges from 13 to 38px, with the title capped at 38px.
 
 - **Two cameras:** full piano and paper-roll close-up, with smooth transitions.
 - **Vintage visuals:** a 2.5D upright piano, textured and aged paper, brass spools, and a complete 88-key keyboard.
