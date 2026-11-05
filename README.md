@@ -4,7 +4,7 @@
 
 一个复古风格的自动演奏钢琴网页应用。以暖白色界面、象牙色琴身与黄铜机械细节，呈现打孔纸卷驱动钢琴演奏的过程。导入 MIDI 或 MusicXML 乐谱，即可观看纸卷向下移动，并同步聆听音乐与观察琴键响应。
 
-[在线体验](https://pianola-paper-and-sound.huangyixiu1.chatgpt.site/)
+[在线体验](https://alex2wong-g.github.io/paper-music/)
 
 ## 应用效果
 
